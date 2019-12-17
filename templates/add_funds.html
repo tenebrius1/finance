@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add funds
+{% endblock %}
+
+{% block main %}
+    <h4>Add funds to your account</h4>
+    <p></p>
+    <form action="/add_funds" method="post" novalidate>
+        <div class="form-group">
+            <input type="number" min="1" class="form-control" placeholder="Funds to add" name="number" id="number" autocomplete="off" required>
+            <div id="msg"></div>
+        </div>
+
+        <button class="btn btn-primary" type="submit" id="submit">Add funds</button>
+    </form>
+
+    <script>
+    $(document).ready(function(){
+        $("#submit").click(function(e){
+            num = document.getElementById('number').value;
+            if ($("#number").val() == "") {
+                  $("#msg").html("Enter amount of funds to add").css("color","red");
+                  e.preventDefault();
+                  e.stopPropagation();
+            } else if ($("#number").val() <= 0) {
+                $("#msg").html("Number cannot be less than 0").css("color","red");
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+    });
+    </script>
+
+
+{% endblock %}

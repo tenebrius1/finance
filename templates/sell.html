@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Sell
+{% endblock %}
+
+{% block main %}
+    <h4>Sell stocks</h4>
+
+    <form action="/sell" method="post" novalidate class="needs-validation">
+        <div class="form-group">
+            <select class="form-control" name="symbol" id="symbol" required>
+                <option disabled selected value="">Symbol</option>
+                {% for symbol in symbols %}
+                <option>
+                    {{ symbol["symbol"] }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <input autocomplete="off" class="form-control" min="1" name="shares" placeholder="Shares" type="number" id="number" required>
+            <div id="msg"></div>
+        </div>
+        <button class="btn btn-primary" type="submit" id="submit">Sell</button>
+    </form>
+
+    <script>
+    $(document).ready(function(){
+        $("#submit").click(function(e){
+            num = document.getElementById('number').value;
+            if ($("#number").val() == "") {
+                  $("#msg").html("Enter number of shares to sell").css("color","red");
+                  e.preventDefault();
+                  e.stopPropagation();
+            } else if ($("#number").val() <= 0) {
+                $("#msg").html("Number cannot be less than 0").css("color","red");
+                e.preventDefault();
+                e.stopPropagation();
+            } else if (!Number.isInteger(+num)) {
+                 $("#msg").html("Number must be an integer").css("color","red");
+                 e.preventDefault();
+                 e.stopPropagation();
+            } else if (Number.isInteger(+num)) {
+                $("#msg").html("");
+            }
+        });
+    });
+    </script>
+
+    <script>
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+    </script>
+
+{% endblock %}
