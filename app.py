@@ -7,7 +7,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helper.helpers import apology, login_required, lookup, usd
+from helpers import apology, login_required, lookup, usd
 
 # Configure application
 app = Flask(__name__)
@@ -37,8 +37,7 @@ Session(app)
 db = SQL("sqlite:///finance.db")
 
 # Make sure API key is set
-if not os.environ.get("API_KEY"):
-    raise RuntimeError("API_KEY not set")
+os.environ["API_KEY"] = "pk_a3ac73c946c447b4a9912ca07a54a9e6"
 
 
 @app.route("/")
@@ -270,6 +269,7 @@ def quote():
         quotes = []
         for i in lst:
             check = lookup(i)
+            print(check)
             # Checks whether user stock code is valid
             if check == None:
                 return apology("invalid symbol", 400)
@@ -386,6 +386,3 @@ def errorhandler(e):
 # Listen for errors
 for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
-    
-if __name__ == "__main__":
-    app.run()
